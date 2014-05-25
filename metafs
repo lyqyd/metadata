@@ -20,7 +20,9 @@ fs.find = oldfs.find
 fs.getDir = oldfs.getDir
 
 local function isPathMeta(path)
-	if string.match(path, "^/?(%.meta)/") then return true else return false end
+	local metapath = string.match(metadata.getMetaFolderForPath(path), "/?(.*)")
+	local path = string.sub(string.match(path, "/?(.*)"), #metapath, #metapath)
+	return path == metapath
 end
 
 local function getTimeStamp()
@@ -28,7 +30,7 @@ local function getTimeStamp()
 end
 
 local function deleteMetadata(path)
-	if oldfs.exists(fs.combine(".meta", path)) then oldfs.delete(fs.combine(".meta", path)) end
+	if oldfs.exists(fs.combine(metadata.getMetaFolderForPath(path), path)) then oldfs.delete(fs.combine(metadata.getMetaFolderForPath(path), path)) end
 end
 
 fs.copy = function(from, to)
