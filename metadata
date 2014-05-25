@@ -47,15 +47,16 @@ function getForFolder(path)
 	end
 end
 
-local function walkMetaFolder(path, meta)
+local function walkFolder(path, meta)
+	local path = path or "/"
 	local data = meta or {}
 	if fs.exists(path) and fs.isDir(path) then
 		for _, file in ipairs(fs.list(path)) do
 			local current = fs.combine(path, file)
 			if fs.isDir(current) then
-				metadata.getForFolder(current, data)
+				walkFolder(current, data)
 			else
-				data[current] = metadata.parse(current)
+				data[current] = metadata.getForFile(current)
 			end
 		end
 		return data
@@ -64,7 +65,7 @@ end
 
 function load()
 	if fs.exists(".meta") and fs.isDir(".meta") then
-		return walkMetaFolder(".meta")
+		return walkFolder()
 	else
 		return nil, "no metadata available"
 	end
