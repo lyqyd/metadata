@@ -29,7 +29,7 @@ function getMetaFolderForPath(path)
 	if drive == "hdd" or drive == "rom" then
 		return "/.meta"
 	else
-		return fs.combine(string.match(path, "/?[^/]+"), ".meta")
+		return fs.combine(disk.getMountPath(drive), ".meta")
 	end
 end
 
