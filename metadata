@@ -29,11 +29,12 @@ function getMetaFolderForPath(path)
 	if drive == "hdd" or drive == "rom" then
 		return "/.meta", path
 	else
-		local mountPath = fs.combine(disk.getMountPath(drive), ".meta")
+		local mountPath = disk.getMountPath(drive)
+		local metaPath = fs.combine(mountPath, ".meta")
 		if string.sub(mountPath, 1, 1) ~= "/" then mountPath = "/"..mountPath end
 		if string.sub(path, 1, 1) ~= "/" then path = "/"..path end
-		local pathRemainder = string.match(path, mountPath.."/(.*)")
-		return mountPath, pathRemainder
+		local pathRemainder = string.match(path, fs.combine(mountPath, "(.*)"))
+		return metaPath, pathRemainder
 	end
 end
 
